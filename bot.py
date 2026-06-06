@@ -74,6 +74,8 @@ def migrate_db():
             pass  # Kolon zaten varsa atla
     conn.commit()
     conn.close()
+
+def save_user(user_id, username, first_name):
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     c.execute("""
