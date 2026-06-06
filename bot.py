@@ -652,7 +652,18 @@ async def handle_callbacks(update: Update, context: ContextTypes.DEFAULT_TYPE):
     name = user.first_name or "Agza"
     data = query.data
     username_str = f"@{user.username}" if user.username else "username yok"
+    try:
+        await _handle_callbacks_inner(query, user, name, data, username_str, context)
+    except Exception as e:
+        logger.error(f"Callback error [{data}] for {user.id}: {e}", exc_info=True)
+        try:
+            await query.message.reply_text(
+                "⚠️ Yalňışlík yúze çykdy, täzeden synanyşyň.\n⚠️ Произошла ошибка, попробуйте снова.\n⚠️ An error occurred, please try again.\n⚠️ Bir hata oluştu, lütfen tekrar deneyin."
+            )
+        except Exception:
+            pass
 
+async def _handle_callbacks_inner(query, user, name, data, username_str, context):
     # ── Dil seçimi ──
     if data.startswith("lang_"):
         lang = data.split("_")[1]
@@ -672,7 +683,7 @@ async def handle_callbacks(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
 
-    lang = get_language(user.id) or "tm"
+    lang = get_language(user.id) or "en"
 
     if data == "show_bonuses":
         await query.message.reply_text(
