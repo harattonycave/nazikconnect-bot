@@ -715,7 +715,7 @@ async def _handle_callbacks_inner(query, user, name, data, username_str, context
         save_account_opened(user.id)
         await query.message.reply_text(
             VIDEO2_TEXT[lang].format(name=name, video2=VIDEO_2_LINK),
-            parse_mode="Markdown",
+            parse_mode=None,
             reply_markup=get_video2_keyboard(lang)
         )
         await notify_admins(
